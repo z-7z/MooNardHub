@@ -320,6 +320,20 @@ discordLink = "https://discord.gg/" .. discordLink
 end
 local discordIcon = Ui.Icons.discord or "users"
 local dcCard, dcIcon = detectCard(1, discordIcon)
+local dcWidth = math.min(110, math.max(28, TextService:GetTextSize("Discord", 11, Enum.Font.GothamBold, Vector2.new(10000, 100)).X + 35))
+dcCard.Size = UDim2.new(0, dcWidth, 0, 28)
+local dcLabel = new("TextLabel", {
+Text = "Discord",
+Font = Enum.Font.GothamBold,
+TextSize = 11,
+TextXAlignment = Enum.TextXAlignment.Left,
+TextTruncate = Enum.TextTruncate.AtEnd,
+BackgroundTransparency = 1,
+Position = UDim2.new(0, 27, 0, 0),
+Size = UDim2.new(1, -35, 1, 0),
+Parent = dcCard,
+Theme = { TextColor3 = "Text" },
+})
 local dcBusy = false
 dcCard.Activated:Connect(function()
 if dcBusy then return end
@@ -349,12 +363,14 @@ local buttonsWidth = math.max(122, winList.AbsoluteContentSize.X)
 local cardsRight = width - 14 - buttonsWidth - 10
 local execWidth = math.min(140, math.max(28, TextService:GetTextSize(self.executorLabel.Text, 11, Enum.Font.GothamBold, Vector2.new(10000, 100)).X + 35))
 local leftFull = 46 + nameTextWidth + 2 + 8 + verTextWidth + 10 + 30
-local fullCardsWidth = execWidth + 34
+local fullCardsWidth = execWidth + dcWidth + 6
 local compact = self.minimized or cardsRight - fullCardsWidth - 10 < leftFull
-if compact then execWidth = 28 end
+if compact then execWidth, dcWidth = 28, 28 end
 self.executorLabel.Visible = not compact
+dcLabel.Visible = not compact
 execCard.Size = UDim2.new(0, execWidth, 0, 28)
-local cardsWidth = execWidth + 34
+dcCard.Size = UDim2.new(0, dcWidth, 0, 28)
+local cardsWidth = execWidth + dcWidth + 6
 detect.Size = UDim2.new(0, cardsWidth, 0, 28)
 detect.Position = UDim2.new(1, -(14 + buttonsWidth + 10), 0.5, 0)
 local leftLimit = math.max(46, cardsRight - cardsWidth - 10)
